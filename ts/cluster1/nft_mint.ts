@@ -5,6 +5,7 @@ import { createNft, mplTokenMetadata } from "@metaplex-foundation/mpl-token-meta
 import wallet from "../turbin3-wallet.json"
 import base58 from "bs58";
 
+// const RPC_ENDPOINT = "https://devnet.irys.xyz/";
 const RPC_ENDPOINT = "https://api.devnet.solana.com";
 const umi = createUmi(RPC_ENDPOINT);
 
@@ -16,11 +17,19 @@ umi.use(mplTokenMetadata())
 const mint = generateSigner(umi);
 
 (async () => {
-    // let tx = ???
-    // let result = await tx.sendAndConfirm(umi);
-    // const signature = base58.encode(result.signature);
+    let tx = await createNft(umi,{
+        mint,
+        name:"MEHAN",
+        symbol:"MEH",
+        uri:"https://devnet.irys.xyz/7kzND5j4sqKwnKXszdMSMKqr25CWhXxJryudb6D8QNvJ",
+        sellerFeeBasisPoints:percentAmount(10),
+        isCollection:false
+
+    })
+    let result = await tx.sendAndConfirm(umi);
+    const signature = base58.encode(result.signature);
     
-    // console.log(`Succesfully Minted! Check out your TX here:\nhttps://explorer.solana.com/tx/${signature}?cluster=devnet`)
+    console.log(`Succesfully Minted! Check out your TX here:\nhttps://explorer.solana.com/tx/${signature}?cluster=devnet`)
 
     console.log("Mint Address: ", mint.publicKey);
 })();
